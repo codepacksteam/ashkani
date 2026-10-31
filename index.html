@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#171b24">
+<title>هنر اشکانیان | موزه‌ای تعاملی تصویردار</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Estedad:wght@300;400;500;600;700;800&family=Lalezar&display=swap');
+:root{
+ --ink:#f4efe5;--muted:#c9c0af;--bg:#171b24;--panel:#222833;--panel2:#2b3039;
+ --bronze:#b77b4b;--gold:#d7b779;--lapis:#345b83;--clay:#a95f48;--paper:#e8dcc3;
+ --line:rgba(232,220,195,.16);--shadow:0 24px 70px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:"Estedad",Tahoma,sans-serif;background:var(--bg);color:var(--ink);letter-spacing:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+#app{height:100dvh;width:100%;position:relative;isolation:isolate;background:
+ radial-gradient(ellipse at 82% 12%,rgba(52,91,131,.18),transparent 34%),
+ radial-gradient(ellipse at 8% 90%,rgba(169,95,72,.13),transparent 35%),var(--bg)}
+#app:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
+#progressTrack{position:absolute;top:0;right:0;left:0;height:4px;background:rgba(255,255,255,.07);z-index:20}
+#progress{height:100%;width:0;background:linear-gradient(90deg,var(--clay),var(--gold));transition:width .5s ease}
+.topbar{position:absolute;top:15px;right:26px;left:26px;display:flex;align-items:center;justify-content:space-between;z-index:15;pointer-events:none}
+.brand,.top-actions{pointer-events:auto;display:flex;align-items:center;gap:10px}
+.brand-mark{width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:15px}
+.brand-label{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.icon-btn{border:1px solid var(--line);background:rgba(34,40,51,.75);border-radius:13px;min-width:40px;height:40px;display:grid;place-items:center;transition:.2s;backdrop-filter:blur(12px)}
+.icon-btn:hover{background:var(--lapis);border-color:var(--gold);transform:translateY(-1px)}
+#stage{height:100%;width:100%;position:relative}
+.slide{position:absolute;inset:0;display:none;padding:clamp(68px,8vh,94px) clamp(28px,8vw,126px) 82px;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--bronze) transparent}
+.slide.active{display:flex;flex-direction:column;justify-content:center;animation:slideIn .55s cubic-bezier(.2,.75,.25,1) both}
+@keyframes slideIn{from{opacity:0;transform:translateY(18px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--gold);font-size:12px;font-weight:600;letter-spacing:.08em;margin-bottom:16px}
+.eyebrow:before{content:"";width:28px;height:1px;background:var(--gold)}
+h1,h2,h3,p{margin-top:0}h1,h2,h3{font-weight:500;line-height:1.3}
+h1{font-family:"Lalezar","Estedad",sans-serif;font-size:clamp(44px,7vw,92px);margin-bottom:14px;letter-spacing:.01em}
+h2{font-family:"Lalezar","Estedad",sans-serif;font-size:clamp(30px,4.1vw,54px);margin-bottom:18px}
+h3{font-size:19px;color:var(--gold);margin-bottom:10px}
+.lead{font-size:clamp(15px,1.6vw,20px);line-height:2;color:var(--muted);max-width:850px}
+.small{font-size:12px;color:var(--muted);line-height:1.9}
+.kicker{font-size:11px;color:var(--gold);letter-spacing:.12em}
+.rule{height:1px;background:var(--line);margin:18px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.info-card{background:linear-gradient(145deg,rgba(43,48,57,.88),rgba(34,40,51,.72));border:1px solid var(--line);border-radius:19px;padding:19px 20px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+.info-card:hover{transform:translateY(-4px);border-color:rgba(215,183,121,.55)}
+.info-card:after{content:"";position:absolute;top:-30px;left:-30px;width:90px;height:90px;border:1px solid rgba(215,183,121,.12);transform:rotate(45deg)}
+.info-card p{color:var(--muted);font-size:13px;line-height:1.95;margin-bottom:0}
+.card-index{font-size:11px;color:var(--bronze);margin-bottom:10px}
+.pill{display:inline-flex;border:1px solid rgba(215,183,121,.28);border-radius:99px;padding:5px 11px;color:var(--gold);font-size:11px;margin:4px 4px 0 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,5vw,70px);align-items:center}
+.art-panel{min-height:300px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(52,91,131,.2),rgba(169,95,72,.14));display:grid;place-items:center;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.art-panel:before,.art-panel:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(215,183,121,.24);transform:rotate(45deg)}
+.art-panel:after{width:155px;height:155px;border-color:rgba(215,183,121,.13)}
+.art-symbol{font-size:clamp(100px,18vw,210px);color:var(--gold);opacity:.82;filter:drop-shadow(0 14px 28px rgba(0,0,0,.25));z-index:1}
+.art-caption{position:absolute;bottom:18px;right:20px;left:20px;text-align:center;color:var(--muted);font-size:11px;z-index:2}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.stat{border-right:2px solid var(--bronze);padding:2px 14px 2px 0}
+.stat strong{display:block;font-size:23px;color:var(--gold);font-weight:600}
+.stat span{font-size:11px;color:var(--muted)}
+.timeline{position:relative;margin:25px 0 0;padding:15px 0;display:flex;gap:10px;align-items:stretch;overflow-x:auto}
+.timeline:before{content:"";position:absolute;top:32px;right:20px;left:20px;height:2px;background:linear-gradient(90deg,var(--bronze),var(--gold));opacity:.7}
+.timepoint{min-width:130px;flex:1;background:transparent;border:0;text-align:center;position:relative;padding:0 8px 10px}
+.timepoint .dot{display:block;width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--gold);margin:10px auto 16px;position:relative;z-index:1;transition:.2s}
+.timepoint.selected .dot,.timepoint:hover .dot{background:var(--gold);box-shadow:0 0 0 6px rgba(215,183,121,.12)}
+.timepoint b{font-size:13px;color:var(--ink);display:block}.timepoint small{font-size:10px;color:var(--muted)}
+#timeDetail{margin-top:10px;min-height:100px}
+.map-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center}
+.map-art{width:100%;max-height:390px}
+.map-point{cursor:pointer;fill:var(--gold);stroke:var(--bg);stroke-width:3;transition:.2s}
+.map-point:hover,.map-point.chosen{fill:#fff;stroke:var(--clay);stroke-width:5}
+.map-label{fill:var(--ink);font-size:13px;font-family:Estedad,Tahoma,sans-serif;pointer-events:none}
+.coin-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.coin{height:205px;perspective:1000px;cursor:pointer}
+.coin-inner{height:100%;position:relative;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.75,.2,1)}
+.coin.flipped .coin-inner{transform:rotateY(180deg)}
+.coin-face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid rgba(215,183,121,.4);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;background:radial-gradient(circle at 50% 35%,#80603e,#342c25 72%);text-align:center}
+.coin-face.back{transform:rotateY(180deg);background:linear-gradient(145deg,#2d4052,#222833)}
+.coin-disc{width:95px;height:95px;border-radius:50%;border:4px double #d0ad6d;display:grid;place-items:center;color:#e3c58b;font-size:35px;box-shadow:inset 0 0 16px rgba(0,0,0,.5),0 0 0 6px rgba(215,183,121,.08);margin-bottom:10px}
+.coin-face b{font-size:13px}.coin-face small{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.7}
+.compare{position:relative;height:300px;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(120deg,#6d5744,#28394a)}
+.compare-layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:24px;text-align:center}
+.compare-layer.left{background:linear-gradient(135deg,rgba(169,95,72,.92),rgba(91,58,46,.9));clip-path:inset(0 50% 0 0)}
+.compare-layer .symbol{font-size:85px;color:#f0d9b0}
+.compare-layer h3{color:#fff}
+.compare-layer p{max-width:300px;font-size:12px;line-height:1.8}
+.compare-divider{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--gold);box-shadow:0 0 0 5px rgba(215,183,121,.14);pointer-events:none}
+.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize}
+.compare-hint{font-size:11px;color:var(--muted);margin-top:9px}
+.hotspot-stage{position:relative;min-height:280px;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(ellipse at center,rgba(169,95,72,.25),rgba(34,40,51,.85))}
+.hotspot-figure{height:100%;min-height:280px;display:grid;place-items:center;font-size:150px;color:var(--gold);opacity:.8}
+.hotspot{position:absolute;width:30px;height:30px;border-radius:50%;background:var(--gold);color:#1a1c20;border:3px solid rgba(255,255,255,.5);font-weight:800;box-shadow:0 0 0 8px rgba(215,183,121,.12)}
+.hotspot:hover{transform:scale(1.12)}
+.hotspot-tip{position:absolute;bottom:15px;right:15px;left:15px;background:rgba(23,27,36,.9);border:1px solid var(--line);padding:12px 15px;border-radius:12px;font-size:12px;line-height:1.8;color:var(--muted)}
+.arch-slider{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.arch-box{border-radius:18px;min-height:190px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(145deg,rgba(52,91,131,.18),rgba(43,48,57,.85))}
+.arch-box .arch-icon{font-size:58px;color:var(--gold)}
+.arch-box p{font-size:12px;color:var(--muted);line-height:1.8;margin:0}
+.controls{position:absolute;bottom:18px;right:26px;left:26px;display:flex;align-items:center;justify-content:space-between;z-index:15}
+.nav-group{display:flex;align-items:center;gap:9px}
+.nav-btn{height:42px;min-width:42px;border-radius:13px;background:rgba(34,40,51,.85);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;backdrop-filter:blur(10px);transition:.2s}
+.nav-btn:hover{border-color:var(--gold);background:var(--lapis)}
+#counter{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);min-width:58px;text-align:center}
+#sidebar{position:absolute;top:0;bottom:0;right:0;width:min(320px,88vw);background:rgba(20,24,32,.97);border-left:1px solid var(--line);z-index:30;transform:translateX(105%);transition:transform .3s ease;padding:75px 20px 25px;overflow:auto;backdrop-filter:blur(20px)}
+#sidebar.open{transform:translateX(0)}
+#sidebar h3{margin-bottom:16px}
+.side-item{width:100%;text-align:right;padding:12px 13px;margin:3px 0;border:1px solid transparent;background:transparent;border-radius:11px;color:var(--muted);font-size:12px;display:flex;gap:12px;align-items:center}
+.side-item span{color:var(--bronze);font-variant-numeric:tabular-nums}
+.side-item:hover,.side-item.current{background:rgba(215,183,121,.09);border-color:rgba(215,183,121,.2);color:var(--ink)}
+#sidebarClose{position:absolute;top:20px;left:20px}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:25;display:none}
+.overlay.show{display:block}
+.cover{position:relative}
+.cover:after{content:"";position:absolute;left:4%;top:12%;width:38vw;height:38vw;max-width:460px;max-height:460px;border:1px solid rgba(215,183,121,.15);border-radius:50%;box-shadow:0 0 0 25px rgba(215,183,121,.025),0 0 0 55px rgba(215,183,121,.02);pointer-events:none}
+.cover-content{position:relative;z-index:2;max-width:850px}
+.cover .lead{max-width:620px}
+.cover-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(215,183,121,.35);border-radius:100px;padding:8px 14px;color:var(--gold);font-size:12px;margin-top:18px}
+.cover-mark{position:absolute;left:12%;top:27%;font-size:clamp(100px,20vw,260px);color:rgba(215,183,121,.14);z-index:0;transform:rotate(-12deg)}
+.reveal{opacity:0;transform:translateY(12px);animation:reveal .5s ease forwards}
+.active .reveal:nth-child(2){animation-delay:.08s}.active .reveal:nth-child(3){animation-delay:.16s}.active .reveal:nth-child(4){animation-delay:.24s}.active .reveal:nth-child(5){animation-delay:.32s}
+@keyframes reveal{to{opacity:1;transform:translateY(0)}}
+#help{position:absolute;bottom:72px;left:28px;color:rgba(201,192,175,.55);font-size:10px;z-index:10}
+kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:2px 5px;color:var(--muted)}
+#toast{position:absolute;top:70px;left:50%;transform:translateX(-50%);padding:9px 16px;border:1px solid var(--line);background:rgba(34,40,51,.95);border-radius:12px;font-size:12px;color:var(--gold);opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+#toast.show{opacity:1}
+.end-mark{font-size:65px;color:var(--gold);margin:10px 0 20px}
+@media(max-width:800px){
+ .slide{padding:75px 24px 82px}.two-col,.map-wrap{grid-template-columns:1fr}.art-panel{min-height:200px}.grid.three{grid-template-columns:1fr 1fr}
+ .coin-gallery{grid-template-columns:1fr 1fr}.coin{height:180px}.topbar{right:14px;left:14px}.controls{right:14px;left:14px}
+ #help{display:none}.cover:after{left:-15%;top:30%;width:75vw;height:75vw}
+}
+@media(max-width:520px){
+ .grid,.grid.three{grid-template-columns:1fr}.coin-gallery{grid-template-columns:1fr}.coin{height:165px}
+ .brand-label{display:none}.nav-btn .nav-label{display:none}.arch-slider{grid-template-columns:1fr 1fr}
+ h1{font-size:48px}.lead{font-size:14px}.slide{justify-content:flex-start;padding-top:78px}
+ .art-panel{min-height:180px}.hotspot-figure{min-height:210px;font-size:110px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Visual archive: image styling */
+.image-rail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:13px 0 8px;direction:rtl}
+.image-rail.one{grid-template-columns:minmax(0,1fr)}
+.image-rail.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.artifact-image{position:relative;min-width:0;height:clamp(104px,14vh,150px);margin:0;overflow:hidden;border-radius:16px;border:1px solid rgba(215,183,121,.25);background:linear-gradient(135deg,#3b4149,#222833);box-shadow:0 10px 25px rgba(0,0,0,.16)}
+.image-rail.one .artifact-image{height:clamp(145px,22vh,225px)}
+.image-rail.three .artifact-image{height:clamp(95px,12vh,132px)}
+.artifact-image>a{display:block;width:100%;height:100%;cursor:zoom-in}
+.artifact-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .65s ease,filter .4s ease;filter:saturate(.83) contrast(1.02)}
+.artifact-image:hover img{transform:scale(1.055);filter:saturate(1.05) contrast(1.04)}
+.artifact-image figcaption{position:absolute;right:0;left:0;bottom:0;padding:18px 11px 9px;background:linear-gradient(0deg,rgba(12,15,20,.94),rgba(12,15,20,.63) 65%,transparent);pointer-events:none;display:flex;flex-direction:column;gap:2px}
+.artifact-image figcaption b{font-size:11px;color:#f7f0e5;font-weight:600;line-height:1.5}
+.artifact-image figcaption small{font-size:8px;color:#d0c3af;line-height:1.45}
+.artifact-image.img-failed:before{content:"تصویر از منبع بیرونی بارگذاری نشد";position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;font-size:11px;color:var(--muted);background:repeating-linear-gradient(135deg,#2d333d,#2d333d 10px,#252b34 10px,#252b34 20px)}
+.cover-photo{position:absolute;left:7%;top:18%;width:min(34vw,440px);height:65%;z-index:1;opacity:.84;pointer-events:none;display:grid;place-items:center;mask-image:linear-gradient(90deg,black 65%,transparent 100%)}
+.cover-photo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 20px 42px rgba(0,0,0,.5))}
+.cover-content{max-width:62%;margin-right:0}
+.art-panel{isolation:isolate}
+.art-panel:before,.art-panel:after{z-index:1;pointer-events:none}
+.art-panel-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.68;filter:saturate(.72) contrast(1.06);z-index:0}
+.art-panel:after{background:linear-gradient(0deg,rgba(20,23,30,.52),transparent 65%);width:auto;height:auto;inset:0;transform:none;border:0}
+.hotspot-stage{isolation:isolate}
+.hotspot-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:linear-gradient(135deg,#252b34,#3b3430);opacity:.92}
+.hotspot-tip{z-index:3}.hotspot{z-index:4}
+.coin-disc-img{width:100%;height:100%;object-fit:contain;border-radius:50%;padding:8px;background:#e8e1d5}
+.coin .coin-face .coin-disc:has(img){width:105px;height:105px;border:2px double #d0ad6d;border-radius:50%;background:#40352a;overflow:hidden;padding:0}
+.coin .coin-face .coin-disc img{width:100%;height:100%;object-fit:contain}
+.image-credit-note{position:absolute;top:47px;left:28px;z-index:9;font-size:8px;color:rgba(201,192,175,.72);display:flex;align-items:center;gap:4px;direction:rtl}
+.image-credit-note a{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(215,183,121,.45)}
+.image-credit-note a:hover{color:#fff}
+@media(max-width:800px){.cover-photo{left:0;top:34%;width:35vw;height:48%;opacity:.48}.cover-content{max-width:80%}.image-rail{margin:10px 0 5px}}
+@media(max-width:700px){.image-credit-note{display:none}}
+@media(max-width:520px){.cover-photo{left:0;top:48%;width:48vw;height:38%;opacity:.38}.cover-content{max-width:100%}.image-rail,.image-rail.three{grid-template-columns:repeat(2,minmax(0,1fr))}.image-rail .artifact-image,.image-rail.three .artifact-image{height:110px}.image-rail.one .artifact-image{height:150px}.artifact-image figcaption b{font-size:10px}.artifact-image figcaption small{font-size:7px}}
+
+</style>
+</head>
+<body>
+<div id="app">
+ <div id="progressTrack"><div id="progress"></div></div>
+ <header class="topbar">
+  <div class="brand"><div class="brand-mark">𐭠</div><div class="brand-label">موزه‌ی تعاملی هنر اشکانیان</div></div>
+  <div class="top-actions">
+   <button class="icon-btn" id="menuBtn" aria-label="فهرست اسلایدها" title="فهرست">☰</button>
+   <button class="icon-btn" id="fullBtn" aria-label="تمام صفحه" title="تمام صفحه">⛶</button>
+  </div>
+ </header>
+ <main id="stage">
+  <section class="slide active cover" data-title="هنر اشکانیان"><figure class="cover-photo" aria-label="تندیس مرد شمی"><img src="https://upload.wikimedia.org/wikipedia/commons/7/71/Shami_statue%2C_1.94_metre-high_bronze_statue_of_a_Parthian_noble%2C_from_the_sanctuary_at_Shami_in_Elymais%2C_Parthian_period%2C_dated_50_BC_-_150_AD%2C_National_Museum_of_Iran%2C_Tehran%2C_Iran_-_50890061311.jpg" alt="تندیس مفرغی مرد شمی" loading="eager"></figure>
+   <div class="cover-mark">𐭠</div>
+   <div class="cover-content">
+    <div class="eyebrow reveal">تاریخ هنر ایران · دوره‌ی باستان</div>
+    <h1 class="reveal">هنر<br><span style="color:var(--gold)">اشکانیان</span></h1>
+    <p class="lead reveal">روایتِ یک هویت بصری مستقل؛ جایی که سنت‌های ایرانی، میراث هلنیستی و جهان شرقی در زبانی تازه به هم رسیدند.</p>
+    <div class="cover-tag reveal">✦ ارائه‌ی تعاملی · محصولات هنری و صنایع دستی ایران</div>
+   </div>
+  </section>
+  <section class="slide" data-title="درآمدی بر هنر اشکانی">
+   <div class="eyebrow">۰۱ / زمینه‌ی تاریخی</div><h2>پلی پویا میان دو امپراتوری</h2><div class="image-rail one" aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Parthian_Empire_at_its_greatest_extent.png" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: قلمرو اشکانی در بیشترین گستره"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Parthian_Empire_at_its_greatest_extent.png" alt="قلمرو اشکانی در بیشترین گستره" loading="lazy" decoding="async"></a><figcaption><b>قلمرو اشکانی در بیشترین گستره</b><small>Keeby101 · Wikimedia Commons · CC BY-SA 4.0</small></figcaption></figure></div>
+   <div class="two-col">
+    <div><p class="lead">هنر اشکانی را نباید صرفاً دوره‌ای گذار یا تقلیدی از هنر یونانی دانست؛ این دوره سنتی هنری مستقل، پویا و نوآورانه پدید آورد.</p>
+     <div class="stat-row"><div class="stat"><strong>۲۴۷ پ.م.</strong><span>آغاز حکومت</span></div><div class="stat"><strong>۲۲۴ م.</strong><span>پایان حکومت</span></div><div class="stat"><strong>۴+ قرن</strong><span>تداوم تاریخی</span></div></div>
+    </div>
+    <div class="grid">
+     <article class="info-card"><div class="card-index">A / قلمرو</div><h3>گستره‌ی جغرافیایی</h3><p>ایران، میان‌رودان، ارمنستان و بخش‌هایی از آسیای مرکزی در اوج قدرت.</p></article>
+     <article class="info-card"><div class="card-index">B / هویت</div><h3>زبان بصری نو</h3><p>تلفیق ریشه‌های بومی ایرانی، میراث هلنیستی و هنر شرقی.</p></article>
+     <article class="info-card"><div class="card-index">C / اهمیت</div><h3>نقطه‌ی عطف</h3><p>شناخت این دوره برای فهم تحولات هنر ساسانی و مسیرهای فرهنگی بعدی کلیدی است.</p></article>
+     <article class="info-card"><div class="card-index">D / ارتباط</div><h3>پل فرهنگی</h3><p>هنر اشکانی در غرب و شرق، به‌ویژه آسیای مرکزی، اثرگذار بود.</p></article>
+    </div>
+   </div>
+  </section>
+  <section class="slide" data-title="وضعیت سیاسی و اجتماعی">
+   <div class="eyebrow">۰۲ / جامعه و قدرت</div><h2>ساختار سیاسی، بازتاب هنری</h2><div class="image-rail " aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Golden_Necklace_-_Parthian_Empire_2nd_AD.JPG" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: گردنبند طلایی دوره اشکانی"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Golden_Necklace_-_Parthian_Empire_2nd_AD.JPG" alt="گردنبند طلایی دوره اشکانی" loading="lazy" decoding="async"></a><figcaption><b>گردنبند طلایی دوره اشکانی</b><small>Wikimedia Commons · اعتبار و مجوز در صفحه فایل</small></figcaption></figure><figure class="artifact-image "><a href="https://www.metmuseum.org/essays/the-parthian-empire-247-b-c-224-a-d" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: گوشواره‌های طلایی اشکانی"><img src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/326937/1624254/main-image" alt="گوشواره‌های طلایی اشکانی" loading="lazy" decoding="async"></a><figcaption><b>گوشواره‌های طلایی اشکانی</b><small>موزه متروپولیتن · مجموعه هنر خاور نزدیک باستان</small></figcaption></figure></div>
+   <p class="lead">نظام غیرمتمرکز و اشرافی، تنوع منطقه‌ای را تقویت کرد؛ در عین حال هنر به ابزاری برای نمایش قدرت و هویت مشترک بدل شد.</p>
+   <div class="grid three">
+    <article class="info-card"><div class="card-index">۰۱</div><h3>حکومت فدرال</h3><p>در قیاس با ساختار متمرکز هخامنشی، اشکانیان بر اشرافیت محلی و قدرت منطقه‌ای تکیه داشتند.</p></article>
+    <article class="info-card"><div class="card-index">۰۲</div><h3>قدرت اشراف</h3><p>شاهنشاه با اتکا به اشراف بزرگ و پادشاهان دست‌نشانده در مناطق مختلف حکومت می‌کرد.</p></article>
+    <article class="info-card"><div class="card-index">۰۳</div><h3>تنوع منطقه‌ای</h3><p>از سوریه تا آسیای مرکزی، زبان بصری مشترک با گرایش‌های محلی همراه بود.</p></article>
+    <article class="info-card"><div class="card-index">۰۴</div><h3>جامعه‌ی طبقاتی</h3><p>لباس فاخر، جواهرات و تجملات بازتاب‌دهنده‌ی جایگاه اشراف در جامعه بود.</p></article>
+    <article class="info-card"><div class="card-index">۰۵</div><h3>مشروعیت‌سازی</h3><p>هنر در ایجاد هویت بصری و ایدئولوژیک مشترک میان اقوام مختلف نقش داشت.</p></article>
+    <article class="info-card"><div class="card-index">۰۶</div><h3>نمایش قدرت</h3><p>اثر هنری علاوه بر زیبایی، ابزار تمایز طبقاتی و القای شکوه و اقتدار بود.</p></article>
+   </div>
+  </section>
+  <section class="slide" data-title="تلفیق فرهنگی">
+   <div class="eyebrow">۰۳ / ستون فقرات هنر</div><h2>تلفیق فرهنگی؛ خلق، نه تقلید</h2><div class="image-rail one" aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://www.metmuseum.org/essays/the-parthian-empire-247-b-c-224-a-d" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: تزیین معماری با جانوران افسانه‌ای"><img src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/322626/711825/main-image" alt="تزیین معماری با جانوران افسانه‌ای" loading="lazy" decoding="async"></a><figcaption><b>تزیین معماری با جانوران افسانه‌ای</b><small>موزه متروپولیتن · اثر معماری اشکانی از هترا</small></figcaption></figure></div>
+   <div class="two-col">
+    <div class="art-panel"><img class="art-panel-image" src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/326623/711819/main-image" alt="ریتون نقره‌ای اشکانی" loading="lazy"><div class="art-caption">سه جریان فرهنگی در یک زبان بصری تازه</div></div>
+    <div>
+     <article class="info-card"><h3>میراث هلنیستی</h3><p>شهرسازی، ستون‌های یونانی، مجسمه‌سازی واقع‌گرا و تکنیک‌های کلاسیک.</p></article>
+     <article class="info-card" style="margin-top:10px"><h3>جهان میان‌رودان</h3><p>معماری آجری، تزیینات گچی و تصویرگری‌های دینی و روایی.</p></article>
+     <article class="info-card" style="margin-top:10px"><h3>سنت ایرانی</h3><p>لباس‌های سنتی، تاج‌های خاص، نمادهای دینی و مفاهیم ایدئولوژیک ایرانی.</p></article>
+     <div class="rule"></div><p class="small">برآیند: واقع‌گرایی یونانی با بیان نمادین شرقی آمیخت؛ هنرمند عناصر بیرونی را برای بیان مفاهیم بومی تطبیق داد.</p>
+    </div>
+   </div>
+  </section>
+  <section class="slide" data-title="هویت بصری و مشروعیت">
+   <div class="eyebrow">۰۴ / تصویر قدرت</div><h2>هویت بصری؛ مشروعیت و اقتدار</h2><div class="image-rail " aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Parthian_Queen_Bust.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: سردیس سنگی یافت‌شده در شوش"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Parthian_Queen_Bust.jpg" alt="سردیس سنگی یافت‌شده در شوش" loading="lazy" decoding="async"></a><figcaption><b>سردیس سنگی یافت‌شده در شوش</b><small>Darafsh · Wikimedia Commons · CC BY-SA 3.0</small></figcaption></figure><figure class="artifact-image "><a href="https://www.metmuseum.org/art/collection/search/322352" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: سکه‌ی نقره‌ای مهرداد دوم"><img src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/322351/1624264/main-image" alt="سکه‌ی نقره‌ای مهرداد دوم" loading="lazy" decoding="async"></a><figcaption><b>سکه‌ی نقره‌ای مهرداد دوم</b><small>موزه متروپولیتن · حدود ۱۲۱ تا ۹۱ پ.م.</small></figcaption></figure></div>
+   <div class="grid">
+    <article class="info-card"><h3>نیاز به هویت‌سازی</h3><p>سلسله‌ی نوظهور برای تثبیت مشروعیت سیاسی، به هویتی متمایز نیاز داشت.</p></article>
+    <article class="info-card"><h3>احیای نمادهای ایرانی</h3><p>تاج‌های ویژه، از جمله تاج هاله‌دار، و لباس‌های سنتی در تصویر شاهی اهمیت یافتند.</p></article>
+    <article class="info-card"><h3>پذیرش و تطبیق</h3><p>هنر یونانی رد نشد؛ تکنیک‌ها با روحیه و سلیقه‌ی ایرانی ـ شرقی سازگار شدند.</p></article>
+    <article class="info-card"><h3>اشرافیت و تجمل</h3><p>نمایش ثروت، لباس‌های فاخر و جواهرات جایگاه اجتماعی را آشکار می‌کرد.</p></article>
+    <article class="info-card"><h3>تبلیغات سیاسی</h3><p>تندیس‌ها، سکه‌ها و بناهای باشکوه، ابزار نمایش اقتدار و مشروعیت بودند.</p></article>
+    <article class="info-card"><h3>تمایز از سلوکیان</h3><p>زبان بصری نو، هویتی مستقل و ایرانی برای اشکانیان پدید آورد.</p></article>
+   </div>
+  </section>
+  <section class="slide" data-title="تمام‌رخ‌نگاری">
+   <div class="eyebrow">۰۵ / ویژگی سبکی</div><h2>تمام‌رخ‌نگاری و نگاه مستقیم</h2>
+   <div class="two-col">
+    <div><p class="lead">پیکره اغلب رو به مخاطب می‌ایستد؛ نگاه مستقیم، ایستایی و تأکید بر «حضور» جای حرکت و نمایش سه‌بعدی را می‌گیرد.</p>
+     <div class="grid">
+      <article class="info-card"><h3>چشم‌های درشت</h3><p>مردمک‌ها با خطوط عمیق ترسیم می‌شوند و نگاه را نافذ می‌کنند.</p></article>
+      <article class="info-card"><h3>حضور ابدی</h3><p>حالت ایستا بر ذات، ثبات و اقتدار پیکره تأکید دارد.</p></article>
+      <article class="info-card"><h3>رابطه با مخاطب</h3><p>نگاه خیره، بیننده را به شاهد مستقیم اثر تبدیل می‌کند.</p></article>
+      <article class="info-card"><h3>نمونه‌ی شاخص</h3><p>تندیس مرد شمی نمونه‌ای برجسته از این رویکرد است.</p></article>
+     </div>
+    </div>
+    <div class="hotspot-stage"><img class="hotspot-photo" src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Parthian_Man_Statue.jpg" alt="پیکره‌ی مرد پارتی" loading="lazy">
+     <button class="hotspot" style="top:32%;right:38%" data-tip="نگاه مستقیم: پیوند بصری با مخاطب و القای حضور نافذ.">۱</button>
+     <button class="hotspot" style="top:53%;right:61%" data-tip="حالت ایستا: تأکید بر پایداری و ذات پیکره، نه حرکت گذرا.">۲</button>
+     <button class="hotspot" style="top:73%;right:47%" data-tip="لباس و جزئیات: نمایش جایگاه اجتماعی از طریق پوشش و تزیینات.">۳</button>
+     <div class="hotspot-tip" id="hotspotTip">روی نقاط شماره‌دار بزن تا ویژگی‌های سبکی را ببینی.</div>
+    </div>
+   </div>
+  </section>
+  <section class="slide" data-title="معماری و ایوان">
+   <div class="eyebrow">۰۶ / معماری</div><h2>پلان، فضا و تولد ایوان</h2><div class="image-rail one" aria-label="گالری تصاویر این بخش"><figure class="artifact-image"><a href="https://commons.wikimedia.org/wiki/File:Hatra_ruins.jpg" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Hatra_ruins.jpg" alt="ویرانه‌های معماری هترا" loading="lazy" decoding="async"></a><figcaption><b>ویرانه‌های معماری هترا</b><small>Victrav · Wikimedia Commons · مشخصات مجوز در صفحه فایل</small></figcaption></figure></div>
+   <div class="two-col">
+    <div class="art-panel"><img class="art-panel-image" src="https://upload.wikimedia.org/wikipedia/commons/4/41/Hatra_Arch.jpg" alt="قوس معماری هترا" loading="lazy"><div class="art-caption">ایوان: فضای سرپوشیده و باز از یک سو</div></div>
+    <div class="grid">
+     <article class="info-card"><h3>پلان‌ها</h3><p>پلان‌های مستطیلی و مربعی با سازمان‌دهی داخلی پیچیده‌تر.</p></article>
+     <article class="info-card"><h3>سلسله‌مراتب فضا</h3><p>تفکیک فضاهای عمومی، نیمه‌عمومی و خصوصی بر اساس اهمیت.</p></article>
+     <article class="info-card"><h3>تک‌ایوانی</h3><p>یک ایوان بزرگ می‌توانست فضای اصلی و شاخص بنا باشد.</p></article>
+     <article class="info-card"><h3>چهارایوانی</h3><p>آغاز کاربرد چهار ایوان پیرامون حیاط مرکزی در این دوره مطرح است.</p></article>
+     <article class="info-card" style="grid-column:1/-1"><h3>کارکرد و میراث</h3><p>ایوان به‌عنوان ورودی باشکوه، تالار پذیرایی یا فضای مذهبی، به عنصر هویت‌بخش معماری ایرانی تبدیل شد و در دوره‌های بعد تکامل یافت.</p></article>
+    </div>
+   </div>
+  </section>
+  <section class="slide" data-title="طاق، گنبد و گوشواره">
+   <div class="eyebrow">۰۷ / نوآوری سازه‌ای</div><h2>طاق، گنبد و گوشواره</h2><div class="image-rail " aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Hatra_ruins.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: ویرانه‌های معماری هترا"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Hatra_ruins.jpg" alt="ویرانه‌های معماری هترا" loading="lazy" decoding="async"></a><figcaption><b>ویرانه‌های معماری هترا</b><small>Victrav · Wikimedia Commons · مشخصات مجوز در صفحه فایل</small></figcaption></figure><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Hatra_Arch.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: قوس ورودی یادمانی هترا"><img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Hatra_Arch.jpg" alt="قوس ورودی یادمانی هترا" loading="lazy" decoding="async"></a><figcaption><b>قوس ورودی یادمانی هترا</b><small>Arya Aras · Wikimedia Commons · CC0</small></figcaption></figure></div>
+   <p class="lead">گوشواره راهکاری برای گذار از فضای مربع به پایه‌ی دایره‌ای گنبد معرفی می‌شود؛ این ایده امکان پوشش فضاهای وسیع را گسترش داد.</p>
+   <div class="arch-slider">
+    <div class="arch-box"><div class="arch-icon">⌜</div><h3>طاق قوسی و گهواره‌ای</h3><p>پوشش فضاهای بزرگ با کاهش نیاز به ستون‌های متعدد و ایجاد فضای یکپارچه.</p></div>
+    <div class="arch-box"><div class="arch-icon">◯</div><h3>چالش مربع و دایره</h3><p>قرار دادن گنبد دایره‌ای بر بنای مربع، نیازمند واسطه‌ای سازه‌ای در گوشه‌هاست.</p></div>
+    <div class="arch-box"><div class="arch-icon">⌑</div><h3>گوشواره (Squinch)</h3><p>سازه‌ی کوچک قوس‌دار یا مثلثی در گوشه‌ی مربع که سطحی مناسب برای گنبد فراهم می‌کند.</p></div>
+    <div class="arch-box"><div class="arch-icon">⬡</div><h3>تداوم تاریخی</h3><p>این تکنیک در معماری ساسانی و سپس در معماری اسلامی گسترش یافت.</p></div>
+   </div>
+   <div class="small" style="margin-top:13px">نکته‌ی ارائه: برای توضیح سازه، از طرح شماتیک گوشه‌ی مربع و تبدیل آن به پایه‌ی گنبد استفاده کن.</div>
+  </section>
+  <section class="slide" data-title="مصالح و تزیینات">
+   <div class="eyebrow">۰۸ / مصالح و آرایه‌ها</div><h2>از آجر تا گچ؛ بافت معماری</h2><div class="image-rail " aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Zahhak_castle_stucco_2.JPG" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: نقش‌برجسته‌ی گچی سرباز"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Zahhak_castle_stucco_2.JPG" alt="نقش‌برجسته‌ی گچی سرباز" loading="lazy" decoding="async"></a><figcaption><b>نقش‌برجسته‌ی گچی سرباز</b><small>Fabien Dany · Wikimedia Commons · CC BY-SA 2.5</small></figcaption></figure><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Assur_stuck.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: تزیین گچی کاخ اشکانی آشور"><img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Assur_stuck.jpg" alt="تزیین گچی کاخ اشکانی آشور" loading="lazy" decoding="async"></a><figcaption><b>تزیین گچی کاخ اشکانی آشور</b><small>Udimu · Wikimedia Commons · CC BY-SA 3.0</small></figcaption></figure></div>
+   <div class="grid three">
+    <article class="info-card"><div class="card-index">ماده ۰۱</div><h3>خشت و آجر</h3><p>مصالح بومی و در دسترس؛ آجر پخته برای دیوارهای بزرگ، طاق و گنبد دوام فراهم می‌کرد.</p><span class="pill">سازه</span></article>
+    <article class="info-card"><div class="card-index">ماده ۰۲</div><h3>گچ‌بری</h3><p>ماده‌ای منعطف برای تزیینات داخلی؛ نقوش هندسی، گیاهی و گاه انسانی.</p><span class="pill">آرایه</span></article>
+    <article class="info-card"><div class="card-index">ماده ۰۳</div><h3>آجرکاری رنگی</h3><p>آجرهای رنگی برای ساخت الگوهای تزیینی روی دیوار و نما به کار می‌رفتند.</p><span class="pill">نما</span></article>
+    <article class="info-card"><div class="card-index">ماده ۰۴</div><h3>نقاشی دیواری</h3><p>فضاهای کاخی و اشرافی با نقاشی‌هایی پررنگ و پرزرق‌وبرق تزیین می‌شدند.</p><span class="pill">تصویر</span></article>
+    <article class="info-card" style="grid-column:span 2"><div class="card-index">معنای اجتماعی</div><h3>تزیین به‌مثابه نمایش جایگاه</h3><p>میزان و کیفیت آرایه‌ها می‌توانست ثروت، جایگاه اجتماعی صاحب بنا و ترکیب سلیقه‌های هنری شرقی و غربی را بازتاب دهد.</p></article>
+   </div>
+  </section>
+  <section class="slide" data-title="نمونه‌های معماری">
+   <div class="eyebrow">۰۹ / گستره‌ی امپراتوری</div><h2>چهار ایستگاه معماری اشکانی</h2><div class="image-rail " aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Nisa.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: نمایی از نِسا، پایتخت کهن اشکانی"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Nisa.jpg" alt="نمایی از نِسا، پایتخت کهن اشکانی" loading="lazy" decoding="async"></a><figcaption><b>نمایی از نِسا، پایتخت کهن اشکانی</b><small>flydime · Wikimedia Commons · CC BY 2.0</small></figcaption></figure><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Hatra_ruins.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: ویرانه‌های معماری هترا"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Hatra_ruins.jpg" alt="ویرانه‌های معماری هترا" loading="lazy" decoding="async"></a><figcaption><b>ویرانه‌های معماری هترا</b><small>Victrav · Wikimedia Commons · مشخصات مجوز در صفحه فایل</small></figcaption></figure></div>
+   <div class="map-wrap">
+    <svg class="map-art" viewBox="0 0 520 430" role="img" aria-label="نقشه شماتیک مکان‌های مهم هنر اشکانی">
+     <path d="M90 75 L175 35 250 62 300 35 375 82 445 105 420 175 460 235 395 280 365 350 290 380 240 340 170 370 120 315 75 250 40 180Z" fill="rgba(183,123,75,.13)" stroke="rgba(215,183,121,.45)" stroke-width="2"/>
+     <path d="M120 100 Q200 150 250 120 T370 150 Q330 220 380 275 T260 330" fill="none" stroke="rgba(215,183,121,.25)" stroke-dasharray="5 7" stroke-width="2"/>
+     <g class="map-location" data-place="nisa"><circle class="map-point chosen" cx="330" cy="130" r="9"/><text class="map-label" x="350" y="126">نسا</text></g>
+     <g class="map-location" data-place="hatra"><circle class="map-point" cx="180" cy="230" r="9"/><text class="map-label" x="200" y="226">هترا</text></g>
+     <g class="map-location" data-place="dura"><circle class="map-point" cx="110" cy="170" r="9"/><text class="map-label" x="130" y="166">دورا اروپوس</text></g>
+     <g class="map-location" data-place="kuh"><circle class="map-point" cx="370" cy="300" r="9"/><text class="map-label" x="390" y="296">کوه خواجه</text></g>
+     <text x="260" y="415" fill="rgba(201,192,175,.6)" font-size="10" text-anchor="middle">نقشه‌ی شماتیک برای نمایش پراکندگی؛ نه مرز سیاسی دقیق</text>
+    </svg>
+    <div id="mapDetail" class="info-card"><div class="card-index">مکان منتخب</div><h3>نسا · ترکمنستان</h3><p>یکی از پایتخت‌های اولیه‌ی اشکانیان؛ شامل قلعه‌ی قدیمی و شهر جدید. تالارهای ستون‌دار، خزانه و معابد آن تلفیق سنت‌های محلی و تأثیرات یونانی را نشان می‌دهند.</p></div>
+   </div>
+  </section>
+  <section class="slide" data-title="مجسمه‌سازی">
+   <div class="eyebrow">۱۰ / پیکره‌تراشی</div><h2>مجسمه‌سازی؛ فرم و کارکرد</h2><div class="image-rail one" aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://www.metmuseum.org/essays/the-parthian-empire-247-b-c-224-a-d" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: پیکره‌ی ایستاده‌ی مرد پارتی"><img src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/324158/711823/main-image" alt="پیکره‌ی ایستاده‌ی مرد پارتی" loading="lazy" decoding="async"></a><figcaption><b>پیکره‌ی ایستاده‌ی مرد پارتی</b><small>موزه متروپولیتن · سنگ آهکی · دوره اشکانی</small></figcaption></figure></div>
+   <div class="two-col">
+    <div class="art-panel"><img class="art-panel-image" src="https://upload.wikimedia.org/wikipedia/commons/7/71/Shami_statue%2C_1.94_metre-high_bronze_statue_of_a_Parthian_noble%2C_from_the_sanctuary_at_Shami_in_Elymais%2C_Parthian_period%2C_dated_50_BC_-_150_AD%2C_National_Museum_of_Iran%2C_Tehran%2C_Iran_-_50890061311.jpg" alt="تندیس مرد شمی" loading="lazy"><div class="art-caption">پیکره‌ی ایستا، نگاه مستقیم و پوشش پرجزئیات</div></div>
+    <div class="grid">
+     <article class="info-card"><h3>فرم و حالت</h3><p>پیکره رو به جلو، ایستا و با پاهای نزدیک به هم برای القای صلابت.</p></article>
+     <article class="info-card"><h3>چهره</h3><p>چشمان درشت و خیره برای ارتباط نافذ و انتقال حس قدرت.</p></article>
+     <article class="info-card"><h3>لباس</h3><p>توجه کمتر به آناتومی برهنه و بیشتر به چین لباس، پارچه و جواهرات.</p></article>
+     <article class="info-card"><h3>کارکردها</h3><p>مذهبی، سیاسی، یادمانی و گاه مرتبط با مقابر و نمایش جایگاه.</p></article>
+    </div>
+   </div>
+  </section>
+  <section class="slide" data-title="شاهکارهای پیکره‌تراشی">
+   <div class="eyebrow">۱۱ / نمونه‌های شاخص</div><h2>از مرد شمی تا پیکره‌های نسا</h2><div class="image-rail three" aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Shami_statue,_1.94_metre-high_bronze_statue_of_a_Parthian_noble,_from_the_sanctuary_at_Shami_in_Elymais,_Parthian_period,_dated_50_BC_-_150_AD,_National_Museum_of_Iran,_Tehran,_Iran_-_50890061311.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: تندیس مفرغی مرد شَمی"><img src="https://upload.wikimedia.org/wikipedia/commons/7/71/Shami_statue%2C_1.94_metre-high_bronze_statue_of_a_Parthian_noble%2C_from_the_sanctuary_at_Shami_in_Elymais%2C_Parthian_period%2C_dated_50_BC_-_150_AD%2C_National_Museum_of_Iran%2C_Tehran%2C_Iran_-_50890061311.jpg" alt="تندیس مفرغی مرد شَمی" loading="lazy" decoding="async"></a><figcaption><b>تندیس مفرغی مرد شَمی</b><small>Carole Raddato · Wikimedia Commons · CC BY-SA 2.0</small></figcaption></figure><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Shahiro_statue_at_Hatra.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: پیکره‌ی شاهیرو در هترا"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Shahiro_statue_at_Hatra.jpg" alt="پیکره‌ی شاهیرو در هترا" loading="lazy" decoding="async"></a><figcaption><b>پیکره‌ی شاهیرو در هترا</b><small>Spc. Leigh Campbell · Wikimedia Commons</small></figcaption></figure><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Parthian_Man_Statue.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: پیکره‌ی مرد پارتی"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Parthian_Man_Statue.jpg" alt="پیکره‌ی مرد پارتی" loading="lazy" decoding="async"></a><figcaption><b>پیکره‌ی مرد پارتی</b><small>Wikimedia Commons · پیکره اشکانی</small></figcaption></figure></div>
+   <div class="grid three">
+    <article class="info-card"><div class="art-symbol" style="font-size:72px;text-align:center">♙</div><h3>تندیس مرد شمی</h3><p>خوزستان؛ حدود ۱۰۰ پ.م. تندیس سنگی با پوشش ایرانی، کلاه‌مدر، ریش و چشمان نافذ. هویت فرد با قطعیت روشن نیست و احتمالاً اشراف‌زاده، حاکم یا شخصیت مذهبی بوده است.</p></article>
+    <article class="info-card"><div class="art-symbol" style="font-size:72px;text-align:center">♟</div><h3>مجسمه‌های هترا</h3><p>پیکره‌های سنگی، عمدتاً از آهک، در معابد و بناها؛ چهره‌های تمام‌رخ، چشم‌های درشت، موهای مجعد و لباس‌های پرچین.</p></article>
+    <article class="info-card"><div class="art-symbol" style="font-size:72px;text-align:center">✺</div><h3>پیکره‌های گچی نسا</h3><p>مجسمه‌های گچی با رنگ‌آمیزی زنده و جزئیات چهره و پوشش؛ یادآور آن‌که آثار باستانی امروز بی‌رنگ، در اصل می‌توانستند رنگین باشند.</p></article>
+   </div>
+   <div class="small" style="margin-top:14px">در نسخه‌ی نهایی تحقیق، تصویر مستند هر اثر را با ذکر موزه/محل نگهداری و منبع تصویر جایگزین کن.</div>
+  </section>
+  <section class="slide" data-title="نقاشی دیواری">
+   <div class="eyebrow">۱۲ / رنگ و روایت</div><h2>نقاشی دیواری؛ رنگ، تکنیک، داستان</h2><div class="image-rail " aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Duraeuropa-1-.JPG" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: نقاشی دیواری کنیسه‌ی دورا اروپوس"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Duraeuropa-1-.JPG" alt="نقاشی دیواری کنیسه‌ی دورا اروپوس" loading="lazy" decoding="async"></a><figcaption><b>نقاشی دیواری کنیسه‌ی دورا اروپوس</b><small>Wikimedia Commons · نقاشی باستانی، حدود ۲۴۴ م.</small></figcaption></figure><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Kuh_i_khwaja_wall_painting.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: نقاشی دیواری کوه خواجه"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Kuh_i_khwaja_wall_painting.jpg" alt="نقاشی دیواری کوه خواجه" loading="lazy" decoding="async"></a><figcaption><b>نقاشی دیواری کوه خواجه</b><small>Wikimedia Commons · تاریخ‌گذاری فایل: سده‌های ۴ تا ۷ م.</small></figcaption></figure></div>
+   <div class="two-col">
+    <div><article class="info-card"><h3>فرسک / نقاشی تر</h3><p>اجرای رنگ روی گچ تازه و مرطوب؛ با خشک شدن گچ، رنگ در سطح آن تثبیت می‌شود.</p></article>
+     <article class="info-card" style="margin-top:10px"><h3>تمپرا / نقاشی خشک</h3><p>رنگ‌دانه‌های معدنی یا گیاهی همراه چسب طبیعی روی گچ خشک؛ امکان جزئیات بیشتر، با دوام متفاوت.</p></article>
+     <div class="rule"></div><div class="pill">قرمز اخرایی</div><div class="pill">زرد</div><div class="pill">آبی</div><div class="pill">سبز</div><div class="pill">سیاه</div>
+    </div>
+    <div class="grid">
+     <article class="info-card"><h3>شکار</h3><p>شیر، آهو و گراز؛ نماد قدرت، شجاعت و چیرگی بر طبیعت.</p></article>
+     <article class="info-card"><h3>ضیافت</h3><p>بازتاب سبک زندگی اشرافی و اهمیت مجالس اجتماعی.</p></article>
+     <article class="info-card"><h3>مذهبی و اساطیری</h3><p>خدایان، مراسم عبادی و روایت‌های اساطیری برای انتقال تقدس.</p></article>
+     <article class="info-card"><h3>نمونه‌ها</h3><p>کوه خواجه در سیستان و دورا اروپوس در سوریه. توجه: تاریخ‌گذاری تصویر بازنشرشده از کوه خواجه در صفحه‌ی منبع، سده‌های ۴ تا ۷ میلادی ذکر شده است؛ بنابراین انتساب قطعی آن به دوره‌ی اشکانی نیازمند احتیاط است.</p></article>
+    </div>
+   <p class="small" style="margin-top:10px">یادداشت تاریخ‌گذاری تصاویر: صفحه‌ی منبع برای نقاشی دورا اروپوس حدود ۲۴۴ میلادی و برای بازنشر نقاشی کوه خواجه سده‌های ۴ تا ۷ میلادی را ذکر می‌کند؛ هر دو تاریخ پس از پایان دودمان اشکانی (۲۲۴ میلادی) است. بهتر است این تصاویر را با احتیاط و به‌عنوان شواهد تداوم سنت‌های هنری منطقه معرفی کنی، نه آثار قطعی هم‌زمان با حکومت اشکانی.</p>
+   </div>
+  </section>
+  <section class="slide" data-title="صنایع دستی و هنرهای کاربردی">
+   <div class="eyebrow">۱۳ / هنر کاربردی</div><h2>صنایع دستی؛ مهارت، تجمل و تجارت</h2>
+   <p class="lead">کارت‌ها را لمس یا کلیک کن تا روی آن‌ها برگردانی و نکته‌ی تکمیلی را ببینی.</p>
+   <div class="coin-gallery">
+    <div class="coin" tabindex="0"><div class="coin-inner"><div class="coin-face"><div class="coin-disc"><img class="coin-disc-img" src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/326623/711819/main-image" alt="ریتون نقره‌ای اشکانی" loading="lazy"></div><b>فلزکاری و ریتون</b><small>نقره، برنز، ظروف برجسته و جام‌های حیوان‌پیکر</small></div><div class="coin-face back"><b>کارکرد دوگانه</b><small>ریتون‌ها هم کاربرد نوشیدنی داشتند و هم در آیین‌ها، جشن‌ها و تزیینات به کار می‌رفتند.</small></div></div></div>
+    <div class="coin" tabindex="0"><div class="coin-inner"><div class="coin-face"><div class="coin-disc"><img class="coin-disc-img" src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/326937/1624254/main-image" alt="گوشواره طلایی اشکانی" loading="lazy"></div><b>جواهرسازی</b><small>طلا، نقره، عقیق، لاجورد و فیروزه</small></div><div class="coin-face back"><b>نشانه‌ی جایگاه</b><small>گوشواره، گردنبند، بازوبند و تاج؛ با نقوش هندسی، گیاهی و نمادین.</small></div></div></div>
+    <div class="coin" tabindex="0"><div class="coin-inner"><div class="coin-face"><div class="coin-disc">◈</div><b>عاج‌کاری</b><small>ماده‌ی لوکس برای اشیای تزیینی و مبلمان</small></div><div class="coin-face back"><b>مصنوعات نفیس</b><small>جعبه‌ها، کاسه‌ها و آرایه‌های مبلمان یا کلاه‌خود در برخی مناطق.</small></div></div></div>
+    <div class="coin" tabindex="0"><div class="coin-inner"><div class="coin-face"><div class="coin-disc"><img class="coin-disc-img" src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Parthian_oil_lamp.JPG" alt="چراغ سفالی اشکانی" loading="lazy"></div><b>سفالگری</b><small>سفال روزمره، لعاب‌دار و تزیینی</small></div><div class="coin-face back"><b>روش‌های آرایه</b><small>نقوش حکاکی‌شده، مهرشده یا قالب‌برجسته؛ داده‌هایی از زندگی روزمره.</small></div></div></div>
+    <div class="coin" tabindex="0"><div class="coin-inner"><div class="coin-face"><div class="coin-disc"><img class="coin-disc-img" src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/324492/711824/main-image" alt="آبریز سرامیکی به شکل سر مرد، نمونه پارتی" loading="lazy"></div><b>لعاب و رنگ</b><small>سبز، آبی و قهوه‌ای</small></div><div class="coin-face back"><b>زیبایی و دوام</b><small>لعاب، سطح سفال را زیباتر می‌کرد و می‌توانست به دوام آن کمک کند.</small></div></div></div>
+    <div class="coin" tabindex="0"><div class="coin-inner"><div class="coin-face"><div class="coin-disc"><img class="coin-disc-img" src="https://collectionapi.metmuseum.org/api/collection/v1/iiif/322626/711825/main-image" alt="تزیین معماری اشکانی" loading="lazy"></div><b>نقوش و نمادها</b><small>اساطیری، شکار و نمادهای مذهبی</small></div><div class="coin-face back"><b>خوانش فرهنگی</b><small>طرح‌ها و نقش‌ها، باورها و جایگاه اجتماعی سفارش‌دهندگان را بازتاب می‌دادند.</small></div></div></div>
+   </div>
+  </section>
+  <section class="slide" data-title="سکه‌شناسی">
+   <div class="eyebrow">۱۴ / رسانه‌ی قدرت</div><h2>سکه‌شناسی؛ تصویر شاه و ایدئولوژی</h2>
+   <div class="two-col">
+    <div class="art-panel"><img class="art-panel-image" src="https://upload.wikimedia.org/wikipedia/commons/7/70/Drachma_with_Mithridates_I_%28obverse%29_and_Arsaces_I_%28rerverse%29.jpg" alt="دو روی درهم اشکانی" loading="lazy"><div class="art-caption">سکه: سندی اقتصادی، هنری و سیاسی</div></div>
+    <div>
+     <div class="timeline" style="padding-top:0">
+      <button class="timepoint selected" data-coin="early"><span class="dot"></span><b>دوره‌ی آغازین</b><small>نیم‌رخ</small></button>
+      <button class="timepoint" data-coin="late"><span class="dot"></span><b>دوره‌ی متأخر</b><small>اقتدارگرایی</small></button>
+     </div>
+     <div class="info-card" id="coinDetail"><h3>تصویر نیم‌رخ</h3><p>در آغاز، چهره‌ها اغلب نیم‌رخ و نسبتاً واقع‌گرا بودند؛ الگویی متأثر از سکه‌های یونانی و سلوکی.</p></div>
+     <div class="rule"></div>
+     <div class="grid">
+      <article class="info-card"><h3>تاج و چهره</h3><p>تاج ویژه، ریش و آرایش مو، هویت تصویری شاه را مشخص می‌کرد.</p></article>
+      <article class="info-card"><h3>نمادهای دینی</h3><p>آتشدان، فرّه یا ستاره می‌توانست مشروعیت دینی را تداعی کند.</p></article>
+      <article class="info-card"><h3>زبان‌ها</h3><p>نوشته‌های یونانی و پارتی نشان‌دهنده‌ی تعاملات فرهنگی و اداری بود.</p></article>
+      <article class="info-card"><h3>رسانه‌ی فراگیر</h3><p>سکه‌ها ابزار تبلیغ ایدئولوژی شاهی و منبع شناخت تاریخ و هنرند.</p></article>
+     </div>
+    </div>
+   </div>
+  </section>
+  <section class="slide" data-title="میراث و تأثیرات">
+   <div class="eyebrow">۱۵ / میراث ماندگار</div><h2>از اشکانیان به جهان‌های بعدی</h2><div class="image-rail one" aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Drachma_with_Mithridates_I_(obverse)_and_Arsaces_I_(rerverse).jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: روی و پشت درهم اشکانی"><img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Drachma_with_Mithridates_I_%28obverse%29_and_Arsaces_I_%28rerverse%29.jpg" alt="روی و پشت درهم اشکانی" loading="lazy" decoding="async"></a><figcaption><b>روی و پشت درهم اشکانی</b><small>Wikimedia Commons · مهرداد یکم و ارشک یکم</small></figcaption></figure></div>
+   <div class="grid">
+    <article class="info-card"><h3>هنر ساسانی</h3><p>ایوان، طاق، گنبد، سنگ‌نگاره‌های سلطنتی، فلزکاری و نمادگرایی دینی ـ سیاسی ادامه یافتند و تکامل پیدا کردند.</p></article>
+    <article class="info-card"><h3>هنر بیزانس</h3><p>نمایش سلسله‌مراتبی قدرت، لباس‌های فاخر، جواهرات و تزیین‌گرایی در مسیرهای فرهنگی قابل پیگیری است.</p></article>
+    <article class="info-card"><h3>آسیای مرکزی</h3><p>جایگاه ایران در مسیر جاده‌ی ابریشم، انتقال الگوهای هنری به شرق را تسهیل کرد.</p></article>
+    <article class="info-card"><h3>هنر بودایی و گندهارا</h3><p>برخی عناصر بصری و آرایه‌ای در هنر هند و بودایی قابل ردیابی دانسته می‌شوند.</p></article>
+   </div>
+   <div class="art-panel" style="margin-top:16px;min-height:150px"><div style="text-align:center;z-index:1"><div class="kicker">میراث معماری</div><div style="font-size:32px;color:var(--gold);margin:8px">ایوان · طاق · گنبد</div><div class="small">سنت‌هایی که در دوره‌های بعدی شکل‌های تازه یافتند.</div></div></div>
+  </section>
+  <section class="slide" data-title="جمع‌بندی">
+   <div class="eyebrow">۱۶ / نتیجه‌گیری</div><h2>هنر اشکانی؛ تلفیق، هویت و نوآوری</h2><div class="image-rail " aria-label="گالری تصاویر این بخش"><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Hatra_Arch.jpg" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: قوس ورودی یادمانی هترا"><img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Hatra_Arch.jpg" alt="قوس ورودی یادمانی هترا" loading="lazy" decoding="async"></a><figcaption><b>قوس ورودی یادمانی هترا</b><small>Arya Aras · Wikimedia Commons · CC0</small></figcaption></figure><figure class="artifact-image "><a href="https://commons.wikimedia.org/wiki/File:Duraeuropa-1-.JPG" target="_blank" rel="noopener noreferrer" aria-label="مشاهده منبع تصویر: نقاشی دیواری کنیسه‌ی دورا اروپوس"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Duraeuropa-1-.JPG" alt="نقاشی دیواری کنیسه‌ی دورا اروپوس" loading="lazy" decoding="async"></a><figcaption><b>نقاشی دیواری کنیسه‌ی دورا اروپوس</b><small>Wikimedia Commons · نقاشی باستانی، حدود ۲۴۴ م.</small></figcaption></figure></div>
+   <div class="two-col">
+    <div><p class="lead">هنر اشکانی صرفاً حلقه‌ای گذار نبود؛ سنتی خلاق و مستقل بود که با پذیرش عناصر گوناگون، هویت خود را حفظ کرد و زبانی ماندگار آفرید.</p>
+     <div class="end-mark">✦</div><div class="pill">هویت بصری مستقل</div><div class="pill">تلفیق فرهنگی</div><div class="pill">نوآوری معماری</div><div class="pill">میراث ماندگار</div>
+    </div>
+    <div class="grid">
+     <article class="info-card"><h3>۱. خلق سبک</h3><p>سنت ایرانی، میراث یونانی و جهان شرقی در زبانی تازه پیوند خوردند.</p></article>
+     <article class="info-card"><h3>۲. قدرت تصویر</h3><p>تمام‌رخ‌نگاری و نگاه مستقیم، حضوری مقتدر و ماندگار می‌آفریدند.</p></article>
+     <article class="info-card"><h3>۳. نوآوری سازه</h3><p>ایوان، طاق و راهکارهای گنبدسازی در معماری ایران اثر گذاشتند.</p></article>
+     <article class="info-card"><h3>۴. تنوع منطقه‌ای</h3><p>از نسا تا هترا و دورا اروپوس، وحدت بصری با تفاوت‌های محلی همراه بود.</p></article>
+    </div>
+   </div>
+   <div class="rule"></div><p class="lead" style="font-size:17px;color:var(--gold)">سپاس از توجه شما</p>
+  </section>
+ </main>
+ <div id="overlay" class="overlay"></div>
+ <aside id="sidebar" aria-label="فهرست اسلایدها"><button id="sidebarClose" class="icon-btn" aria-label="بستن فهرست">×</button><h3>فهرست سفر</h3><div id="sideList"></div></aside>
+ <div class="image-credit-note">منابع تصویر: <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons</a> · <a href="https://www.metmuseum.org/" target="_blank" rel="noopener">موزه متروپولیتن</a> · برای مشاهده‌ی مشخصات و مجوز، روی تصویر کلیک کن.</div>
+ <div id="help"><kbd>←</kbd> <kbd>→</kbd> حرکت میان اسلایدها · <kbd>F</kbd> تمام‌صفحه · <kbd>Esc</kbd> بستن فهرست</div>
+ <div class="controls">
+  <div class="nav-group"><button class="nav-btn" id="prevBtn" aria-label="اسلاید قبلی">→ <span class="nav-label">قبلی</span></button><button class="nav-btn" id="nextBtn" aria-label="اسلاید بعدی"><span class="nav-label">بعدی</span> ←</button></div>
+  <div id="counter">۱ / ۱۷</div>
+  <div class="nav-group"><button class="nav-btn" id="homeBtn" title="بازگشت به آغاز">⌂</button></div>
+ </div>
+ <div id="toast">حالت تمام‌صفحه</div>
+</div>
+<script>
+(()=>{
+ const slides=[...document.querySelectorAll('.slide')], progress=document.getElementById('progress'), counter=document.getElementById('counter');
+ const sideList=document.getElementById('sideList'), sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay');
+ let index=0, touchX=0,touchY=0;
+ const fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+ slides.forEach((s,i)=>{let b=document.createElement('button');b.className='side-item';b.innerHTML=`<span>${fa(i+1).padStart(2,'۰')}</span>${s.dataset.title}`;b.onclick=()=>{go(i);closeMenu()};sideList.appendChild(b)});
+ const sideItems=[...document.querySelectorAll('.side-item')];
+ function go(n){n=Math.max(0,Math.min(slides.length-1,n));if(n===index)return;slides[index].classList.remove('active');slides[index].scrollTop=0;index=n;slides[index].classList.add('active');slides[index].scrollTop=0;progress.style.width=((index+1)/slides.length*100)+'%';counter.textContent=`${fa(index+1)} / ${fa(slides.length)}`;sideItems.forEach((b,i)=>b.classList.toggle('current',i===index));document.getElementById('prevBtn').disabled=index===0;document.getElementById('nextBtn').disabled=index===slides.length-1; }
+ function openMenu(){sidebar.classList.add('open');overlay.classList.add('show')}
+ function closeMenu(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+ document.getElementById('menuBtn').onclick=openMenu;document.getElementById('sidebarClose').onclick=closeMenu;overlay.onclick=closeMenu;
+ document.getElementById('prevBtn').onclick=()=>go(index-1);document.getElementById('nextBtn').onclick=()=>go(index+1);document.getElementById('homeBtn').onclick=()=>go(0);
+ async function fullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch(e){toast('مرورگر اجازه‌ی تمام‌صفحه نداد')}}
+ document.getElementById('fullBtn').onclick=fullscreen;
+ function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1500)}
+ document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(index+1)}else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(index-1)}else if(e.key.toLowerCase()==='f'){fullscreen()}else if(e.key==='Escape'){closeMenu()}else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(slides.length-1)}});
+ const stage=document.getElementById('stage');
+ stage.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+ stage.addEventListener('touchend',e=>{let dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.25){if(dx<0)go(index+1);else go(index-1)}},{passive:true});
+ 
+ document.querySelectorAll('.artifact-image img, .cover-photo img, .art-panel-image, .hotspot-photo, .coin-disc-img').forEach(img=>{
+   img.addEventListener('error',()=>{const parent=img.closest('figure');if(parent){parent.classList.add('img-failed');}img.remove();},{once:true});
+ });
+
+ // Timeline and other interactive components
+ const hotBtns=[...document.querySelectorAll('.hotspot')];hotBtns.forEach(b=>b.onclick=()=>document.getElementById('hotspotTip').textContent=b.dataset.tip);
+ const mapInfo={
+  nisa:['نسا · ترکمنستان','یکی از پایتخت‌های اولیه‌ی اشکانیان؛ شامل قلعه‌ی قدیمی و شهر جدید. تالارهای ستون‌دار، خزانه و معابد آن تلفیق سنت‌های محلی و تأثیرات یونانی را نشان می‌دهند.'],
+  hatra:['هترا · عراق','شهری مستحکم در شمال میان‌رودان؛ معابد، دیوارهای ضخیم، طاق‌های قوسی و آرایه‌های سنگی و گچی از ویژگی‌های آن بود.'],
+  dura:['دورا اروپوس · سوریه','شهر مرزی در غرب قلمرو؛ کنیسه و خانه‌ی کلیسا با نقاشی‌های دیواری، نمونه‌هایی از ترکیب هنر یونانی‌ـ‌رومی و شرقی‌اند.'],
+  kuh:['کوه خواجه · سیستان','مجموعه‌ای مذهبی و کاخی بر تپه؛ شامل معبد، کاخ و تالارهای ستون‌دار. نقاشی‌های دیواری آن از نمونه‌های مهم شرق ایران‌اند.']
+ };
+ document.querySelectorAll('.map-location').forEach(g=>g.onclick=()=>{document.querySelectorAll('.map-point').forEach(p=>p.classList.remove('chosen'));g.querySelector('.map-point').classList.add('chosen');let d=mapInfo[g.dataset.place];document.getElementById('mapDetail').innerHTML=`<div class="card-index">مکان منتخب</div><h3>${d[0]}</h3><p>${d[1]}</p>`});
+ document.querySelectorAll('.coin').forEach(c=>{const flip=()=>c.classList.toggle('flipped');c.addEventListener('click',flip);c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}})});
+ document.querySelectorAll('[data-coin]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-coin]').forEach(x=>x.classList.toggle('selected',x===b));document.getElementById('coinDetail').innerHTML=b.dataset.coin==='early'?'<h3>تصویر نیم‌رخ</h3><p>در آغاز، چهره‌ها اغلب نیم‌رخ و نسبتاً واقع‌گرا بودند؛ الگویی متأثر از سکه‌های یونانی و سلوکی.</p>':'<h3>تغییر به سوی اقتدار</h3><p>با تثبیت هویت ایرانی، تصویر شاه در برخی نمونه‌ها به سمت تمام‌رخ‌نگاری و نمایش اقتدارگرایانه‌تر با چشم‌های درشت و نگاه خیره گرایش یافت.</p>'});
+ const compareRange=document.getElementById('compareRange');if(compareRange)compareRange.addEventListener('input',()=>{document.getElementById('compareLeft').style.clipPath=`inset(0 ${100-compareRange.value}% 0 0)`;document.getElementById('compareDivider').style.left=compareRange.value+'%'});
+ // start state
+ progress.style.width=(100/slides.length)+'%';sideItems[0].classList.add('current');counter.textContent=`${fa(1)} / ${fa(slides.length)}`;
+})();
+</script>
+</body>
+</html>
